@@ -1,0 +1,97 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Search Bar Example',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: SearchPage(),
+    );
+  }
+}
+
+class SearchPage extends StatefulWidget {
+  @override
+  _SearchPageState createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  List<String> items = [
+    'Apple',
+    'Banana',
+    'Orange',
+    'Grapes',
+    'Pineapple',
+    'Mango',
+    'Watermelon',
+    'Peach',
+    'Strawberry',
+    'Blueberry'
+  ];
+
+  List<String> filteredItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredItems = items;  // Initially display all items
+  }
+
+  void _filterItems(String query) {
+    setState(() {
+      filteredItems = items
+          .where((item) => item.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Search Bar Example'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(Icons.search),
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            // Search Bar
+            TextField(
+              onChanged: _filterItems,
+              decoration: InputDecoration(
+                labelText: 'Search',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+            SizedBox(height: 16),
+            // Displaying filtered list
+            Expanded(
+              child: ListView.builder(
+                itemCount: filteredItems.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(filteredItems[index]),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
